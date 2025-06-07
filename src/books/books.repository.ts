@@ -1,9 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { books } from '../database/schema';
 import { DATABASE_CONNECTION } from '../database/database.constants';
-import { CreateBookDto, UpdateBookDto } from '../dto/book.dto';
 import { BaseRepository } from '../common/repositories/base.repository';
+import { books } from '../database/schema';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BooksRepository extends BaseRepository<
@@ -11,10 +12,12 @@ export class BooksRepository extends BaseRepository<
   CreateBookDto,
   UpdateBookDto
 > {
+  protected readonly table = books;
+
   constructor(
     @Inject(DATABASE_CONNECTION)
     db: NodePgDatabase,
   ) {
-    super(db, books);
+    super(db);
   }
 }
