@@ -10,9 +10,13 @@ import * as schema from './schema';
     {
       provide: 'DB',
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
+      useFactory: (configService: ConfigService) => {
         const pool = new Pool({
-          connectionString: configService.get('DATABASE_URL'),
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          user: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_DATABASE'),
         });
         return drizzle(pool, { schema });
       },
