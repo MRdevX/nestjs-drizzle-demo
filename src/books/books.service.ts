@@ -21,15 +21,12 @@ export class BooksService {
   }
 
   async findOne(id: number) {
-    const [book] = await this.db
-      .select()
-      .from(books)
-      .where(eq(books.id, id));
-    
+    const [book] = await this.db.select().from(books).where(eq(books.id, id));
+
     if (!book) {
       throw new NotFoundException(`Book with ID ${id} not found`);
     }
-    
+
     return book;
   }
 
@@ -59,4 +56,4 @@ export class BooksService {
 
     return book;
   }
-} 
+}

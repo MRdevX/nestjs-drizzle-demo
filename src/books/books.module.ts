@@ -9,4 +9,4 @@ import { DatabaseModule } from '../database/database.module';
   providers: [BooksService],
   exports: [BooksService],
 })
-export class BooksModule {} 
+export class BooksModule {}

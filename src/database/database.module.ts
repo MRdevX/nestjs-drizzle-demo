@@ -20,4 +20,4 @@ import * as schema from './schema';
   ],
   exports: ['DB'],
 })
-export class DatabaseModule {} 
+export class DatabaseModule {}

@@ -1,4 +1,10 @@
-import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateBookDto {
@@ -37,4 +43,4 @@ export class UpdateBookDto {
   @IsDate()
   @Type(() => Date)
   publishedAt?: Date;
-} 
+}

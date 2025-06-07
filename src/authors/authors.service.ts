@@ -25,11 +25,11 @@ export class AuthorsService {
       .select()
       .from(authors)
       .where(eq(authors.id, id));
-    
+
     if (!author) {
       throw new NotFoundException(`Author with ID ${id} not found`);
     }
-    
+
     return author;
   }
 
@@ -59,4 +59,4 @@ export class AuthorsService {
 
     return author;
   }
-} 
+}
