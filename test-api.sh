@@ -74,4 +74,35 @@ echo -e "\nGetting updated author..."
 curl http://localhost:3020/authors/1
 
 echo -e "\nGetting updated book..."
-curl http://localhost:3020/books/1 
+curl http://localhost:3020/books/1
+
+echo -e "\nCreating genres..."
+curl -X POST http://localhost:3020/genres \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Fantasy",
+    "description": "Fantasy books"
+  }'
+
+echo -e "\nCreating second genre..."
+curl -X POST http://localhost:3020/genres \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Adventure",
+    "description": "Adventure books"
+  }'
+
+echo -e "\nGetting all genres..."
+curl http://localhost:3020/genres
+
+echo -e "\nAssigning genres to books..."
+curl -X POST http://localhost:3020/genres/1/assign/1
+curl -X POST http://localhost:3020/genres/2/assign/1
+curl -X POST http://localhost:3020/genres/1/assign/2
+curl -X POST http://localhost:3020/genres/2/assign/3
+
+echo -e "\nGetting genres for book 1..."
+curl http://localhost:3020/books/1
+
+echo -e "\nGetting books for genre 1..."
+curl http://localhost:3020/genres/1/books 

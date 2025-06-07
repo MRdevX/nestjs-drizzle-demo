@@ -27,3 +27,26 @@ export const books = pgTable('books', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const genres = pgTable('genres', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull().unique(),
+  description: text('description'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const bookGenres = pgTable(
+  'book_genres',
+  {
+    bookId: integer('book_id')
+      .references(() => books.id)
+      .notNull(),
+    genreId: integer('genre_id')
+      .references(() => genres.id)
+      .notNull(),
+  },
+  (table) => ({
+    pk: [table.bookId, table.genreId],
+  }),
+);
