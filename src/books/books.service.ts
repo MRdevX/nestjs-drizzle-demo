@@ -1,12 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { books } from '../database/schema';
 import { CreateBookDto, UpdateBookDto } from '../dto/book.dto';
 import { eq } from 'drizzle-orm';
+import { DATABASE_CONNECTION } from '../database/database.constants';
 
 @Injectable()
 export class BooksService {
-  constructor(private readonly db: NodePgDatabase) {}
+  constructor(
+    @Inject(DATABASE_CONNECTION)
+    private readonly db: NodePgDatabase,
+  ) {}
 
   async create(createBookDto: CreateBookDto) {
     const [book] = await this.db
