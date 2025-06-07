@@ -24,7 +24,7 @@ export class BooksService {
     return this.db.select().from(books);
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const [book] = await this.db.select().from(books).where(eq(books.id, id));
 
     if (!book) {
@@ -34,7 +34,7 @@ export class BooksService {
     return book;
   }
 
-  async update(id: number, updateBookDto: UpdateBookDto) {
+  async update(id: string, updateBookDto: UpdateBookDto) {
     const [book] = await this.db
       .update(books)
       .set({ ...updateBookDto, updatedAt: new Date() })
@@ -48,7 +48,7 @@ export class BooksService {
     return book;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const [book] = await this.db
       .delete(books)
       .where(eq(books.id, id))

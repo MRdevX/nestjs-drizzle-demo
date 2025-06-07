@@ -1,21 +1,31 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateGenreDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   description?: string;
 }
 
 export class UpdateGenreDto {
-  @IsOptional()
   @IsString()
+  @IsOptional()
   name?: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   description?: string;
+}
+
+export class AssignGenreDto {
+  @IsUUID()
+  @IsNotEmpty()
+  bookId: string;
+
+  @IsUUID()
+  @IsNotEmpty()
+  genreId: string;
 }

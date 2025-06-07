@@ -1,9 +1,9 @@
 import {
   IsDate,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -17,8 +17,8 @@ export class CreateBookDto {
   description?: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  authorId: number;
+  @IsUUID()
+  authorId: string;
 
   @IsOptional()
   @IsDate()
@@ -36,8 +36,8 @@ export class UpdateBookDto {
   description?: string;
 
   @IsOptional()
-  @IsNumber()
-  authorId?: number;
+  @IsUUID()
+  authorId?: string;
 
   @IsOptional()
   @IsDate()

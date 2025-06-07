@@ -1,14 +1,7 @@
-import {
-  pgTable,
-  serial,
-  text,
-  varchar,
-  timestamp,
-  integer,
-} from 'drizzle-orm/pg-core';
+import { pgTable, text, varchar, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const authors = pgTable('authors', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   bio: text('bio'),
@@ -17,10 +10,10 @@ export const authors = pgTable('authors', {
 });
 
 export const books = pgTable('books', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   title: varchar('title', { length: 255 }).notNull(),
   description: text('description'),
-  authorId: integer('author_id')
+  authorId: uuid('author_id')
     .references(() => authors.id)
     .notNull(),
   publishedAt: timestamp('published_at'),
@@ -29,7 +22,7 @@ export const books = pgTable('books', {
 });
 
 export const genres = pgTable('genres', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 100 }).notNull().unique(),
   description: text('description'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -39,10 +32,10 @@ export const genres = pgTable('genres', {
 export const bookGenres = pgTable(
   'book_genres',
   {
-    bookId: integer('book_id')
+    bookId: uuid('book_id')
       .references(() => books.id)
       .notNull(),
-    genreId: integer('genre_id')
+    genreId: uuid('genre_id')
       .references(() => genres.id)
       .notNull(),
   },

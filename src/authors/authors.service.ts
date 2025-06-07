@@ -24,7 +24,7 @@ export class AuthorsService {
     return this.db.select().from(authors);
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const [author] = await this.db
       .select()
       .from(authors)
@@ -37,7 +37,7 @@ export class AuthorsService {
     return author;
   }
 
-  async update(id: number, updateAuthorDto: UpdateAuthorDto) {
+  async update(id: string, updateAuthorDto: UpdateAuthorDto) {
     const [author] = await this.db
       .update(authors)
       .set({ ...updateAuthorDto, updatedAt: new Date() })
@@ -51,7 +51,7 @@ export class AuthorsService {
     return author;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const [author] = await this.db
       .delete(authors)
       .where(eq(authors.id, id))

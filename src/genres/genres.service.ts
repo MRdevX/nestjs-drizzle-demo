@@ -24,7 +24,7 @@ export class GenresService {
     return this.db.select().from(genres);
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const [genre] = await this.db
       .select()
       .from(genres)
@@ -33,7 +33,7 @@ export class GenresService {
     return genre;
   }
 
-  async update(id: number, updateGenreDto: UpdateGenreDto) {
+  async update(id: string, updateGenreDto: UpdateGenreDto) {
     const [genre] = await this.db
       .update(genres)
       .set({ ...updateGenreDto, updatedAt: new Date() })
@@ -43,7 +43,7 @@ export class GenresService {
     return genre;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const [genre] = await this.db
       .delete(genres)
       .where(eq(genres.id, id))
@@ -52,7 +52,7 @@ export class GenresService {
     return genre;
   }
 
-  async assignGenreToBook(bookId: number, genreId: number) {
+  async assignGenreToBook(bookId: string, genreId: string) {
     // Check existence
     const [book] = await this.db
       .select()
@@ -73,7 +73,7 @@ export class GenresService {
     return { message: 'Genre assigned to book' };
   }
 
-  async unassignGenreFromBook(bookId: number, genreId: number) {
+  async unassignGenreFromBook(bookId: string, genreId: string) {
     await this.db
       .delete(bookGenres)
       .where(
@@ -82,7 +82,7 @@ export class GenresService {
     return { message: 'Genre unassigned from book' };
   }
 
-  async getGenresForBook(bookId: number) {
+  async getGenresForBook(bookId: string) {
     return this.db
       .select({
         id: genres.id,
@@ -94,7 +94,7 @@ export class GenresService {
       .where(eq(bookGenres.bookId, bookId));
   }
 
-  async getBooksForGenre(genreId: number) {
+  async getBooksForGenre(genreId: string) {
     return this.db
       .select({
         id: books.id,

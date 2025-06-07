@@ -15,6 +15,13 @@
       "when": 1749323164787,
       "tag": "0001_daily_kang",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749323404237,
+      "tag": "0002_blushing_blade",
+      "breakpoints": true
     }
   ]
 }
