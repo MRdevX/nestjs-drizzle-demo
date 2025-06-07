@@ -55,7 +55,10 @@ export abstract class BaseRepository<
         .filter((condition): condition is SQL => condition !== null);
 
       if (searchConditions.length > 0) {
-        whereConditions.push(or(...searchConditions));
+        const searchOr = or(...searchConditions);
+        if (searchOr) {
+          whereConditions.push(searchOr);
+        }
       }
     }
 
@@ -70,7 +73,7 @@ export abstract class BaseRepository<
     });
 
     // Build the query
-    const queryBuilder = this.db.select().from(this.table);
+    const queryBuilder = this.db.select().from(this.table as any);
 
     // Apply where conditions if any
     const finalQuery =
@@ -109,7 +112,7 @@ export abstract class BaseRepository<
 
   async findOne(id: string): Promise<InferModel<TTable, 'select'> | undefined> {
     const result = await this.db.query[this.table.name].findFirst({
-      where: eq(this.table.id as any, id),
+      where: eq(this.table.id, id),
     });
     return result as InferModel<TTable, 'select'> | undefined;
   }
@@ -124,7 +127,7 @@ export abstract class BaseRepository<
         ...data,
         updatedAt: new Date(),
       } as InferModel<TTable, 'insert'>)
-      .where(eq(this.table.id as any, id))
+      .where(eq(this.table.id, id))
       .returning();
     return result[0] as InferModel<TTable, 'select'> | undefined;
   }
@@ -132,7 +135,7 @@ export abstract class BaseRepository<
   async remove(id: string): Promise<InferModel<TTable, 'select'> | undefined> {
     const result = await this.db
       .delete(this.table)
-      .where(eq(this.table.id as any, id))
+      .where(eq(this.table.id, id))
       .returning();
     return result[0] as InferModel<TTable, 'select'> | undefined;
   }
@@ -153,7 +156,10 @@ export abstract class BaseRepository<
         .filter((condition): condition is SQL => condition !== null);
 
       if (searchConditions.length > 0) {
-        whereConditions.push(or(...searchConditions));
+        const searchOr = or(...searchConditions);
+        if (searchOr) {
+          whereConditions.push(searchOr);
+        }
       }
     }
 
@@ -170,7 +176,7 @@ export abstract class BaseRepository<
     // Build the count query
     const queryBuilder = this.db
       .select({ count: sql<number>`count(*)` })
-      .from(this.table);
+      .from(this.table as any);
 
     // Apply where conditions if any
     const finalQuery =
