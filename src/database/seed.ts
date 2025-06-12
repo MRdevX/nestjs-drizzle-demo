@@ -1,6 +1,8 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import * as schema from './schema';
+import * as authorSchema from '../authors/author.schema';
+import * as bookSchema from '../books/book.schema';
+import * as genreSchema from '../genres/genre.schema';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -16,18 +18,24 @@ async function seed() {
     connectionString,
   });
 
-  const db = drizzle(pool, { schema });
+  const db = drizzle(pool, {
+    schema: {
+      ...authorSchema,
+      ...bookSchema,
+      ...genreSchema,
+    },
+  });
 
   try {
     // Clear existing data
-    await db.delete(schema.bookGenres);
-    await db.delete(schema.books);
-    await db.delete(schema.authors);
-    await db.delete(schema.genres);
+    await db.delete(genreSchema.bookGenres);
+    await db.delete(bookSchema.books);
+    await db.delete(authorSchema.authors);
+    await db.delete(genreSchema.genres);
 
     // Insert authors
     const [author1, author2, author3] = await db
-      .insert(schema.authors)
+      .insert(authorSchema.authors)
       .values([
         {
           name: 'J.K. Rowling',
@@ -48,8 +56,8 @@ async function seed() {
       .returning();
 
     // Insert genres
-    const [fantasy, horror, mystery, scifi] = await db
-      .insert(schema.genres)
+    const [fantasy, horror, mystery] = await db
+      .insert(genreSchema.genres)
       .values([
         {
           name: 'Fantasy',
@@ -65,17 +73,12 @@ async function seed() {
           description:
             'Fiction that follows a crime or a puzzle that needs to be solved',
         },
-        {
-          name: 'Science Fiction',
-          description:
-            'Fiction that deals with futuristic concepts and technology',
-        },
       ])
       .returning();
 
     // Insert books
     const [book1, book2, book3] = await db
-      .insert(schema.books)
+      .insert(bookSchema.books)
       .values([
         {
           title: "Harry Potter and the Philosopher's Stone",
@@ -100,7 +103,7 @@ async function seed() {
       .returning();
 
     // Link books with genres
-    await db.insert(schema.bookGenres).values([
+    await db.insert(genreSchema.bookGenres).values([
       { bookId: book1.id, genreId: fantasy.id },
       { bookId: book2.id, genreId: fantasy.id },
       { bookId: book3.id, genreId: horror.id },

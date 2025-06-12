@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { authors } from '../database/schema';
+import { authors } from './author.schema';
 import { CreateAuthorDto, UpdateAuthorDto } from '../dto/author.dto';
 import { eq } from 'drizzle-orm';
 import { DATABASE_CONNECTION } from '../database/database.constants';

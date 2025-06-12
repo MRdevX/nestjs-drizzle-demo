@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { genres, bookGenres, books } from '../database/schema';
+import { genres, bookGenres } from './genre.schema';
+import { books } from '../books/book.schema';
 import { CreateGenreDto, UpdateGenreDto } from '../dto/genre.dto';
 import { eq, and } from 'drizzle-orm';
 import { DATABASE_CONNECTION } from '../database/database.constants';

@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import * as schema from './schema';
+import * as authorSchema from '../authors/author.schema';
+import * as bookSchema from '../books/book.schema';
+import * as genreSchema from '../genres/genre.schema';
 import { DATABASE_CONNECTION } from './database.constants';
 
 @Module({
@@ -16,7 +18,13 @@ import { DATABASE_CONNECTION } from './database.constants';
         const pool = new Pool({
           connectionString,
         });
-        return drizzle(pool, { schema });
+        return drizzle(pool, {
+          schema: {
+            ...authorSchema,
+            ...bookSchema,
+            ...genreSchema,
+          },
+        });
       },
     },
   ],
