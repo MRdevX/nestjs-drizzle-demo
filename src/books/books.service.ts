@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { books } from './book.schema';
-import { CreateBookDto, UpdateBookDto } from '../dto/book.dto';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 import { eq } from 'drizzle-orm';
 import { DATABASE_CONNECTION } from '../database/database.constants';
 
@@ -15,7 +16,12 @@ export class BooksService {
   async create(createBookDto: CreateBookDto) {
     const [book] = await this.db
       .insert(books)
-      .values(createBookDto)
+      .values({
+        title: createBookDto.title,
+        description: createBookDto.description,
+        authorId: createBookDto.authorId,
+        publishedAt: createBookDto.publishedAt,
+      })
       .returning();
     return book;
   }
@@ -37,7 +43,12 @@ export class BooksService {
   async update(id: string, updateBookDto: UpdateBookDto) {
     const [book] = await this.db
       .update(books)
-      .set({ ...updateBookDto, updatedAt: new Date() })
+      .set({
+        title: updateBookDto.title,
+        description: updateBookDto.description,
+        authorId: updateBookDto.authorId,
+        publishedAt: updateBookDto.publishedAt,
+      })
       .where(eq(books.id, id))
       .returning();
 

@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Put,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -16,11 +15,9 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { GenresService } from './genres.service';
-import {
-  CreateGenreDto,
-  UpdateGenreDto,
-  AssignGenreDto,
-} from '../dto/genre.dto';
+import { CreateGenreDto } from './dto/create-genre.dto';
+import { UpdateGenreDto } from './dto/update-genre.dto';
+import { AssignGenreDto } from './dto/assign-genre.dto';
 
 @ApiTags('genres')
 @Controller('genres')
@@ -29,7 +26,7 @@ export class GenresController {
 
   @Post()
   @ApiOperation({
-    summary: 'Create genre',
+    summary: 'Create a new genre',
     description: 'Creates a new genre with the provided details.',
   })
   @ApiResponse({
@@ -53,7 +50,7 @@ export class GenresController {
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Get genre by id',
+    summary: 'Get a genre by id',
     description: 'Retrieves the details of a specific genre by its ID.',
   })
   @ApiParam({ name: 'id', description: 'The unique identifier of the genre.' })
@@ -62,9 +59,9 @@ export class GenresController {
     return this.genresService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiOperation({
-    summary: 'Update genre',
+    summary: 'Update a genre',
     description: 'Updates the details of an existing genre by its ID.',
   })
   @ApiParam({ name: 'id', description: 'The unique identifier of the genre.' })
@@ -79,7 +76,7 @@ export class GenresController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Delete genre',
+    summary: 'Delete a genre',
     description: 'Deletes a genre by its ID.',
   })
   @ApiParam({ name: 'id', description: 'The unique identifier of the genre.' })
@@ -91,20 +88,18 @@ export class GenresController {
     return this.genresService.remove(id);
   }
 
-  @Put('assign')
-  assignGenreToBook(@Body() assignGenreDto: AssignGenreDto) {
-    return this.genresService.assignGenreToBook(
-      assignGenreDto.bookId,
-      assignGenreDto.genreId,
-    );
-  }
-
-  @Delete('unassign')
-  unassignGenreFromBook(@Body() assignGenreDto: AssignGenreDto) {
-    return this.genresService.unassignGenreFromBook(
-      assignGenreDto.bookId,
-      assignGenreDto.genreId,
-    );
+  @Post('assign')
+  @ApiOperation({
+    summary: 'Assign a genre to a book',
+    description: 'Assigns a genre to a book.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The genre has been successfully assigned to the book.',
+  })
+  @ApiBody({ type: AssignGenreDto, description: 'Genre assignment data.' })
+  assignGenre(@Body() assignGenreDto: AssignGenreDto) {
+    return this.genresService.assignGenre(assignGenreDto);
   }
 
   @Get('book/:bookId')

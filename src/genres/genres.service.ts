@@ -2,7 +2,9 @@ import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { genres, bookGenres } from './genre.schema';
 import { books } from '../books/book.schema';
-import { CreateGenreDto, UpdateGenreDto } from '../dto/genre.dto';
+import { CreateGenreDto } from './dto/create-genre.dto';
+import { UpdateGenreDto } from './dto/update-genre.dto';
+import { AssignGenreDto } from './dto/assign-genre.dto';
 import { eq, and } from 'drizzle-orm';
 import { DATABASE_CONNECTION } from '../database/database.constants';
 
@@ -16,7 +18,10 @@ export class GenresService {
   async create(createGenreDto: CreateGenreDto) {
     const [genre] = await this.db
       .insert(genres)
-      .values(createGenreDto)
+      .values({
+        name: createGenreDto.name,
+        description: createGenreDto.description,
+      })
       .returning();
     return genre;
   }
@@ -37,7 +42,10 @@ export class GenresService {
   async update(id: string, updateGenreDto: UpdateGenreDto) {
     const [genre] = await this.db
       .update(genres)
-      .set({ ...updateGenreDto, updatedAt: new Date() })
+      .set({
+        name: updateGenreDto.name,
+        description: updateGenreDto.description,
+      })
       .where(eq(genres.id, id))
       .returning();
     if (!genre) throw new NotFoundException(`Genre with ID ${id} not found`);
@@ -53,25 +61,15 @@ export class GenresService {
     return genre;
   }
 
-  async assignGenreToBook(bookId: string, genreId: string) {
-    // Check existence
-    const [book] = await this.db
-      .select()
-      .from(books)
-      .where(eq(books.id, bookId));
-    if (!book) throw new NotFoundException(`Book with ID ${bookId} not found`);
-    const [genre] = await this.db
-      .select()
-      .from(genres)
-      .where(eq(genres.id, genreId));
-    if (!genre)
-      throw new NotFoundException(`Genre with ID ${genreId} not found`);
-    // Assign
-    await this.db
+  async assignGenre(assignGenreDto: AssignGenreDto) {
+    const [bookGenre] = await this.db
       .insert(bookGenres)
-      .values({ bookId, genreId })
-      .onConflictDoNothing();
-    return { message: 'Genre assigned to book' };
+      .values({
+        bookId: assignGenreDto.bookId,
+        genreId: assignGenreDto.genreId,
+      })
+      .returning();
+    return bookGenre;
   }
 
   async unassignGenreFromBook(bookId: string, genreId: string) {

@@ -1,5 +1,6 @@
-import { IsString, IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsString, IsOptional, IsUUID, IsDate } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class CreateBookDto {
   @ApiProperty({ description: 'Book title', example: 'My Book' })
@@ -14,15 +15,16 @@ export class CreateBookDto {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({ description: 'Book price', example: 19.99 })
-  @IsNumber()
-  price: number;
-
   @ApiProperty({ description: 'Author ID', example: 'uuid-author-id' })
   @IsUUID()
   authorId: string;
 
-  @ApiProperty({ description: 'Genre ID', example: 'uuid-genre-id' })
-  @IsUUID()
-  genreId: string;
+  @ApiPropertyOptional({
+    description: 'Publication date',
+    example: '2024-01-01',
+  })
+  @IsDate()
+  @Type(() => Date)
+  @IsOptional()
+  publishedAt?: Date;
 }

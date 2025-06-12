@@ -16,8 +16,8 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { BooksService } from './books.service';
-import { CreateBookDto } from '../dto/book.dto';
-import { UpdateBookDto } from '../dto/book.dto';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @ApiTags('books')
 @Controller('books')

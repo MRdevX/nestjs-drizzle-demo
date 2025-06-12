@@ -16,8 +16,8 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { AuthorsService } from './authors.service';
-import { CreateAuthorDto } from '../dto/author.dto';
-import { UpdateAuthorDto } from '../dto/author.dto';
+import { CreateAuthorDto } from './dto/create-author.dto';
+import { UpdateAuthorDto } from './dto/update-author.dto';
 
 @ApiTags('authors')
 @Controller('authors')
